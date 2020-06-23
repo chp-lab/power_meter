@@ -46,3 +46,12 @@ class Gauge(Resource):
             "elapsed_time_ms": elapsed_time,
             "result": gauge_data
         }
+
+class Host(Resource):
+    def get(self):
+        TAG = "Host:"
+        return {
+            "type":True,
+            "message":"Success",
+            "help":"API work well"
+        }

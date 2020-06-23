@@ -3,7 +3,7 @@ from  flask_restful import Api,Resource
 from flask_cors import CORS
 from meters import Meters
 from meter import Meter
-from gauge import Gauge
+from gauge import Gauge, Host
 
 class Server:
     app = None
@@ -23,6 +23,7 @@ if(__name__ == "__main__"):
     server.api.add_resource(Meters, API_VERSION + "/meters")
     server.api.add_resource(Meter, API_VERSION + "/meters/<mid>")
     server.api.add_resource(Gauge, API_VERSION + "/gauge/<mid>")
+    server.api.add_resource(Host, "/")
     server.app.run(host="0.0.0.0", debug=True, port=5000)
 
     # app.run(host="0.0.0.0", debug=True, port=5000)

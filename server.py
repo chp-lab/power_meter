@@ -4,6 +4,15 @@ from flask_cors import CORS
 from meters import Meters
 from meter import Meter
 from gauge import Gauge, Host
+from login import Login, Refresh
+
+
+import jwt
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    jwt_refresh_token_required, create_refresh_token,
+    get_jwt_identity
+)
 
 class Server:
     app = None
@@ -15,6 +24,10 @@ class Server:
         self.app = Flask(__name__)
         CORS(self.app)
         self.api = Api(self.app)
+        self.app.config['JWT_SECRET_KEY'] = '0x00ff0000'
+        # 15 minutes
+        self.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15*60
+        self.jwt = JWTManager(self.app)
 
 if(__name__ == "__main__"):
     TAG = "main:"
@@ -23,6 +36,8 @@ if(__name__ == "__main__"):
     server.api.add_resource(Meters, API_VERSION + "/meters")
     server.api.add_resource(Meter, API_VERSION + "/meters/<mid>")
     server.api.add_resource(Gauge, API_VERSION + "/gauge/<mid>")
+    server.api.add_resource(Login, API_VERSION + "/users/login")
+    server.api.add_resource(Refresh, API_VERSION + '/users/refresh')
     server.api.add_resource(Host, "/")
     server.app.run(host="0.0.0.0", debug=True, port=5000)
 

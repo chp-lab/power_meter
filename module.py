@@ -45,6 +45,28 @@ class Module():
         else:
             return False
 
+    def unauthorized(self):
+        return {
+                   'type': False,
+                   'message': "fail",
+                   'error_message': "Unauthorized",
+                   'result': None
+               }, 401
+
+    def userNotFound(self):
+        return {
+                   'type': False,
+                   'message': "fail",
+                   'error_message': "User not found",
+                   'result': None
+               }, 404
+
+    def isValidToken(self, current_user):
+        if("sub" not in current_user):
+            return False
+        else:
+            return True
+
 if (__name__ == "__main__"):
     module = Module()
     command = "select * from mm20050001 limit 2"

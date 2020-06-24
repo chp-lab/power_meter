@@ -1,13 +1,37 @@
 import time
-from module import *
+from module import Module
 from flask import request
 from flask_restful import Resource
 import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from database import Database
 
 class Meter(Resource):
+    def isUserHasPerm(self, username, mid):
+        TAG = "isUserHasPerm:"
+        database = Database()
+        cmd = """SELECT machineID from Machines WHERE username='%s' AND machineID='%s' """ %(username, mid)
+        res = database.getData(cmd)
+        if(res[1] == 200):
+            if(len(res[0]['result']) > 0):
+                return True
+            else:
+                return False
+
+    @jwt_required
     def get(self, mid):
         TAG = "Meter:"
         module = Module()
+        current_user = get_jwt_identity()
+        print(TAG, "current_user=", current_user)
+
+        username = current_user['sub']
+
+        perm = self.isUserHasPerm(username, mid)
+
+        if(not perm):
+            return module.unauthorized()
+
         start_time = time.time()
         cur_date = datetime.datetime.now()
         st = cur_date.strftime("%Y-%m-%d 00:00:00")

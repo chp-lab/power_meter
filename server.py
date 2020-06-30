@@ -26,7 +26,7 @@ class Server:
         self.api = Api(self.app)
         self.app.config['JWT_SECRET_KEY'] = '0x00ff0000'
         # 15 minutes
-        self.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15*60
+        self.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15*600
         self.jwt = JWTManager(self.app)
 
 if(__name__ == "__main__"):

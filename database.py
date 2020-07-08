@@ -75,3 +75,38 @@ class Database(Resource):
                    'result': result,
                    'elapsed_time_ms': elapsed_time
                }, 200
+
+    def insertData(self, query_cmd):
+        TAG = "Database:"
+        start_time = time.time()
+        # self.__init__()
+        # establish mysql connection
+        module = Module()
+        # print(TAG, self.config)
+        # print(TAG, "Loading data from mysql server")
+        mydb = mysql.connector.connect(**self.config)
+        # print(TAG, "Database is ready")
+        mycursor = mydb.cursor()
+        # print(TAG, "Cursor is ready")
+        # execute the sql command
+        try:
+            # print(TAG, "trying to execute command")
+            mycursor.execute(query_cmd)
+        except Exception as err:
+            # on error execute
+            print(TAG, "error on execute command")
+            print(TAG, err)
+            mydb.close()
+            return module.serveErrMsg()
+        mydb.commit()
+        mydb.close()
+        # calculate elapset time
+        elapsed_time = (time.time() - start_time) * 1000
+        print(TAG, "times=", elapsed_time, "ms")
+        return {
+                   'type': True,
+                   'message': "success",
+                   'error_message': None,
+                   'result': "Meter created",
+                   'elapsed_time_ms': elapsed_time
+               }, 200

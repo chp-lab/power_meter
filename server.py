@@ -5,6 +5,7 @@ from meters import Meters
 from meter import Meter
 from gauge import Gauge, Host
 from login import Login, Refresh
+from create_new_meter import CreateNewMeter
 
 
 import jwt
@@ -38,6 +39,7 @@ if(__name__ == "__main__"):
     server.api.add_resource(Gauge, API_VERSION + "/gauge/<mid>")
     server.api.add_resource(Login, API_VERSION + "/users/login")
     server.api.add_resource(Refresh, API_VERSION + '/users/refresh')
+    server.api.add_resource(CreateNewMeter, API_VERSION + "/meters")
     server.api.add_resource(Host, "/")
     server.app.run(host="0.0.0.0", debug=True, port=5000)
 

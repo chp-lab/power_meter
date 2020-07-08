@@ -67,6 +67,21 @@ class Module():
         else:
             return True
 
+    def wrongAPImsg(self):
+        return {
+                   'type': False,
+                   'message': "fail",
+                   'error_message': "wrong API calling. Check related parameter e.g. query string, url etc.",
+                   'result': None
+               }, 400
+    def meterExist(self):
+        return {
+                   'type': False,
+                   'message': "fail",
+                   'error_message': "Meter exist",
+                   'result': None
+               }, 400
+
 if (__name__ == "__main__"):
     module = Module()
     command = "select * from mm20050001 limit 2"

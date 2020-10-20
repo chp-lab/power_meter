@@ -3,7 +3,7 @@
 void setup() {
   Serial.begin(115200);
   // chp init
-  chp_init();
+  chp_init(true);
   // set sync time from NTP server
   set_sync_time(30*1000);
   Serial.println("Sync time=" + String(get_sync_time()));

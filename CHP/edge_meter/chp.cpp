@@ -1,10 +1,4 @@
-#include <WiFiManager.h>  
-#include <ESP8266WiFi.h>
-#include <ArduinoOTA.h>
-#include <PubSubClient.h>
-#include <ArduinoJson.h>
-#include <Time.h>
-#include <chp.h>
+#include "chp.h"
 
 unsigned long last_wake_up = 0;
 unsigned long time_elapsed = 0;
@@ -15,7 +9,7 @@ unsigned long schedule = INTERVAL;
 
 WiFiClient client;
 PubSubClient mqtt(client);
-WiFiManager wifiManager;
+//WiFiManager wifiManager;
 byte mac[32]; 
 float E[NUM_PHASE];
 String client_name = "default";
@@ -54,23 +48,15 @@ void mqtt_connect()
   mqtt.setServer(MQTT_SERVER, MQTT_PORT);
   mqtt.setCallback(callback);
   Serial.println("Connecting to mqtt broker");
+  client_name = get_client_name();
   while(!mqtt.connect(client_name.c_str(), MQTT_USERNAME, MQTT_PASSWORD))
   {
     Serial.print("*.");
     count = count + 1;
     if(count > MQTT_MAX_RECONNECT)
     {
-      Serial.println("checking internet connection...");
-      if(!wifiManager.autoConnect("EE Powermeter"))
-      {
-        Serial.println("Failed to connect to the AP in " + String(WIFI_TIMEOUT));
-        delay(3000);
+        Serial.println("Internet connection failed, restarting device...");
         ESP.reset(); 
-      }
-      else
-      {
-        Serial.println("WiFi connected");
-      }
     }
     delay(1000);
   }
@@ -143,27 +129,14 @@ String get_client_name()
   WiFi.macAddress(mac);
   
   Serial.print("MAC: ");
-  Serial.print(mac[5],HEX);
-  Serial.print(":");
-  Serial.print(mac[4],HEX);
-  Serial.print(":");
-  Serial.print(mac[3],HEX);
-  Serial.print(":");
-  Serial.print(mac[2],HEX);
-  Serial.print(":");
-  Serial.print(mac[1],HEX);
-  Serial.print(":");
-  Serial.println(mac[0],HEX);
-  
-//  sprintf(buf, "%2X", mac[0]);
-  for(int i = mac_len - 1; i >= 0; i-- )
+  for(int i = 0; i < mac_len; i++ )
   {
     char buf[6];
     sprintf(buf, "%2X", mac[i]);
     tmp_name = tmp_name + "_" + buf;
   }
 
-  Serial.println("tmp_name=" + tmp_name);
+  Serial.println(tmp_name);
   return tmp_name;
 }
 
@@ -366,33 +339,42 @@ String get_time()
   return cur_ts;
 }
 
-void chp_init()
+void chp_init(bool en_log)
 {
-	wifiManager.setTimeout(WIFI_TIMEOUT);
+//	wifiManager.setTimeout(WIFI_TIMEOUT);
 	randomSeed(analogRead(0));
   
 	Serial.println(MODEL_NAME);
 	Serial.println(FW_VERSION);
   
-  	wifiManager.setTimeout(WIFI_TIMEOUT);
+//  	wifiManager.setTimeout(WIFI_TIMEOUT);
   	client_name = get_client_name();
+  	if(!en_log)
+  	{
+  		Serial.println("Log disabled");
+  		meter_id = "";
+	}
   	meter_id = meter_id + client_name;
   	Serial.println("client_name=" + client_name);
   	Serial.println("device_id=" + meter_id);
-  	if(!wifiManager.autoConnect(client_name.c_str()))
-  	{
-    	Serial.println("Failed to connect to the AP in " + String(WIFI_TIMEOUT));
-    	delay(3000);
-    	ESP.reset();
-  	}
-  	else
-  	{
-    	Serial.println("Ready");
-    	Serial.print("IP address: ");
-    	Serial.println(WiFi.localIP());
-    	giantOta();
-    	mqtt_connect();
-  	}
+
+    giantOta();
+    mqtt_connect();
+      
+//  	if(!wifiManager.autoConnect(client_name.c_str()))
+//  	{
+//    	Serial.println("Failed to connect to the AP in " + String(WIFI_TIMEOUT));
+//    	delay(3000);
+//    	ESP.reset();
+//  	}
+//  	else
+//  	{
+//    	Serial.println("Ready");
+//    	Serial.print("IP address: ");
+//    	Serial.println(WiFi.localIP());
+//    	giantOta();
+//    	mqtt_connect();
+//  	}
   	last_wake_up =  millis();
   	Serial.println("Sync time ***");
   	configTime(timezone, dst, "pool.ntp.org", "time.nist.gov");
@@ -418,7 +400,7 @@ bool time_to_sync()
 {
 	if((millis() - last_sync) > sync_time)
 	{
-		Serial.print("Sync time");
+		Serial.println("Sync time");
     	configTime(timezone, dst, "pool.ntp.org", "time.nist.gov");
     	last_sync = millis();
 		return true;
@@ -437,6 +419,12 @@ void listen_for_fw()
 void chp_loop()
 {
 	time_elapsed = millis() - last_wake_up;
+    if(!mqtt.connected())
+    {
+      	Serial.println("On idel state, mqtt client not connect");
+      	mqtt_connect();
+    }
+    mqtt.loop();
 }
 
 bool time_to_send()
@@ -485,5 +473,3 @@ void set_interval(unsigned long sch_t)
 {
 	schedule = sch_t;
 }
-
-

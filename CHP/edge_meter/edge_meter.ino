@@ -1,7 +1,9 @@
-#include <chp.h>
+#include "chp.h"
 
 void setup() {
   Serial.begin(115200);
+  // begin wifi connection
+  esp_wifi_begin();
   // chp init
   chp_init(true);
   // set sync time from NTP server
@@ -17,6 +19,9 @@ void loop() {
   String msg;
   String res = "";
 
+  // web server for AP
+  esp_wifi_handle();
+  
   // create your message
   tmp_msg = uart_read();
   // confirm msg exist

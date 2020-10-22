@@ -1,5 +1,12 @@
 #ifndef CHP_H
 #define CHP_H
+
+#include <ArduinoOTA.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <Time.h>
+#include "chpWifi.h"
+
 #define MODEL_NAME "STD2021"
 #define FW_VERSION "FW Version 1.1.0"
 #define WIFI_TIMEOUT 60*1000
@@ -31,7 +38,7 @@ String randomMessage();
 String uart_read();
 String influx_inline(String j_str);
 String get_time();
-void chp_init();
+void chp_init(bool en_log);
 bool time_to_sync();
 void listen_for_fw();
 void chp_loop();
@@ -41,5 +48,5 @@ unsigned long get_sync_time();
 void set_sync_time(unsigned long sync_t);
 unsigned long get_interval();
 void set_interval(unsigned long sch_t);
+String msg_construct(String payload);
 #endif
-

@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required
 from database import Database
 from flask_jwt_extended import get_jwt_identity
 
+
 class Meters(Resource):
     @jwt_required
     def get(self):
@@ -15,14 +16,13 @@ class Meters(Resource):
         module = Module()
 
         current_user = get_jwt_identity()
-        print(TAG, "current_user=",current_user)
-        
+        print(TAG, "current_user=", current_user)
+
         # print(TAG, "username=", current_user["sub"])
         username = current_user['sub']
 
-        cmd = """SELECT machineID, machineName, department FROM Machines WHERE username='%s' """ %(username)
+        cmd = """SELECT machineID, machineName, department FROM Machines WHERE username='%s' """ % (username)
         res = database.getData(cmd)
-
 
         # command = "show measurements"
         # res = module.getData(command)[0]["values"]
@@ -38,13 +38,14 @@ class Meters(Resource):
         print(TAG, "times=", elapsed_time, "ms")
 
         return res
-        return {
-            "type": True,
-            "message": "success",
-            "elapsed_time_ms": elapsed_time,
-            "len": len(meters),
-            "result": meters
-        }
+        # return {
+        #     "type": True,
+        #     "message": "success",
+        #     "elapsed_time_ms": elapsed_time,
+        #     "len": len(meters),
+        #     "result": meters
+        # }
+
     def structure(self):
         TAG = "Meters:"
         module = Module()
@@ -61,6 +62,8 @@ class Meters(Resource):
             "len": len(res),
             "result": res
         }
+
+
 if (__name__ == "__main__"):
     meters = Meters()
     meters.get()

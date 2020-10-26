@@ -29,6 +29,14 @@
 
 #define DEBUG_MODE true
 
+#define RT_TOPIC "rt_req"
+
+#if defined(ARDUINO_ARCH_ESP8266)
+#define sudo_reboot() ESP.reset()
+#elif defined(ARDUINO_ARCH_ESP32)
+#define sudo_reboot() ESP.restart()
+#endif
+
 void callback(char* topic, byte* payload, unsigned int length) ;
 void pubData(String payload, String topic);
 void mqtt_connect();
@@ -49,4 +57,7 @@ void set_sync_time(unsigned long sync_t);
 unsigned long get_interval();
 void set_interval(unsigned long sch_t);
 String msg_construct(String payload);
+void sub_data(String topic);
+bool real_time_req();
 #endif
+

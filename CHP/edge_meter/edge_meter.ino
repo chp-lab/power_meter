@@ -3,14 +3,14 @@
 void setup() {
   Serial.begin(115200);
   // begin wifi connection
-  esp_wifi_begin();
-  // chp init
+  chp_wifi_begin();
+  // chp platform init
   chp_init(true);
   // set sync time from NTP server
-  set_sync_time(30*1000);
+//  set_sync_time(30*1000);
   Serial.println("Sync time=" + String(get_sync_time()));
   // set upload schedule
-  set_interval(60*1000);
+//  set_interval(60*1000);
   Serial.println("Interval=" + String(get_interval()));
 }
 
@@ -20,7 +20,7 @@ void loop() {
   String res = "";
 
   // web server for AP
-  esp_wifi_handle();
+  chp_wifi_handle();
   
   // create your message
   tmp_msg = uart_read();
@@ -43,6 +43,11 @@ void loop() {
     res = influx_inline(msg);
     Serial.println("res=" + res);
     pubData(res, "influx/" + device_id());
+  }
+  if(real_time_req())
+  {
+    Serial.println("res_rt=" + msg);
+    pubData(msg, "rt_res/" + device_id());
   }
   delay(1000);
 }

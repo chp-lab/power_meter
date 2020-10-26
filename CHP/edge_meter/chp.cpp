@@ -6,10 +6,10 @@ unsigned long sync_time = SYNC_TIME;
 unsigned long last_sync = 0;
 bool start_up = true;
 unsigned long schedule = INTERVAL;
+bool rt_req = false;
 
 WiFiClient client;
 PubSubClient mqtt(client);
-//WiFiManager wifiManager;
 byte mac[32]; 
 float E[NUM_PHASE];
 String client_name = "default";
@@ -20,11 +20,18 @@ int dst = 0;
 int num_prepare = NUM_PREPARE;
 int prepare = PREPARE;
 
+String rt_key = RT_TOPIC;
+
 void callback(char* topic, byte* payload, unsigned int length) 
 {
-  payload[length] = '\0';
-  String topic_str = topic, payload_str = (char*)payload;
-  Serial.println("### [" + topic_str + "]: " + payload_str);
+	payload[length] = '\0';
+	String topic_str = topic, payload_str = (char*)payload;
+	Serial.println("### [" + topic_str + "]: " + payload_str);
+	String rt_topic = rt_key + "/" + device_id();
+	if(topic_str == rt_topic)
+	{
+		rt_req = true;
+	}
 }
 
 void pubData(String payload, String topic)
@@ -56,7 +63,7 @@ void mqtt_connect()
     if(count > MQTT_MAX_RECONNECT)
     {
         Serial.println("Internet connection failed, restarting device...");
-        ESP.reset(); 
+        sudo_reboot();
     }
     delay(1000);
   }
@@ -255,6 +262,7 @@ String uart_read()
 
 String influx_inline(String j_str)
 {
+	// deserialize json data from uart
 //  StaticJsonDocument<2000> doc;
   DynamicJsonDocument doc(2000);
   
@@ -341,13 +349,12 @@ String get_time()
 
 void chp_init(bool en_log)
 {
-//	wifiManager.setTimeout(WIFI_TIMEOUT);
+
 	randomSeed(analogRead(0));
   
 	Serial.println(MODEL_NAME);
 	Serial.println(FW_VERSION);
   
-//  	wifiManager.setTimeout(WIFI_TIMEOUT);
   	client_name = get_client_name();
   	if(!en_log)
   	{
@@ -360,21 +367,7 @@ void chp_init(bool en_log)
 
     giantOta();
     mqtt_connect();
-      
-//  	if(!wifiManager.autoConnect(client_name.c_str()))
-//  	{
-//    	Serial.println("Failed to connect to the AP in " + String(WIFI_TIMEOUT));
-//    	delay(3000);
-//    	ESP.reset();
-//  	}
-//  	else
-//  	{
-//    	Serial.println("Ready");
-//    	Serial.print("IP address: ");
-//    	Serial.println(WiFi.localIP());
-//    	giantOta();
-//    	mqtt_connect();
-//  	}
+
   	last_wake_up =  millis();
   	Serial.println("Sync time ***");
   	configTime(timezone, dst, "pool.ntp.org", "time.nist.gov");
@@ -394,6 +387,9 @@ void chp_init(bool en_log)
 //    	Serial.println("ts=" + String(i) + " " + get_time());
   	}
   	Serial.println("Success, waiting for schedule");
+	String rt_topic = rt_key + "/" + device_id();
+	Serial.println("rt_topic=" + rt_topic);
+  	sub_data(rt_topic);
 }
 
 bool time_to_sync()
@@ -473,3 +469,16 @@ void set_interval(unsigned long sch_t)
 {
 	schedule = sch_t;
 }
+
+void sub_data(String topic)
+{
+  mqtt.subscribe(topic.c_str());
+}
+
+bool real_time_req()
+{
+	bool tmp_rt_req = rt_req;
+	rt_req = false;
+	return tmp_rt_req;
+}
+

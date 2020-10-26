@@ -37,9 +37,9 @@ class CreateNewMeter(Resource):
         meterID = args.get("meter_id")
         meterName = args.get("meter_name")
         department = args.get("department")
-        user_account = args.get("user_account")
+        user_account = username
 
-        # print(TAG, "meterID=", meterID)
+        print(TAG, "meterID=", meterID)
 
         cmd = """SELECT adminID FROM DashaAdmin WHERE adminID='%s' AND level='WRE' """ % (username)
         res = database.getData(cmd)
@@ -48,6 +48,7 @@ class CreateNewMeter(Resource):
             return module.unauthorized()
         cmd = """SELECT machineID FROM Machines WHERE machineID='%s' """ % (meterID)
         res = database.getData(cmd)
+        print(TAG, "res=", res)
         if (res[0]["len"] > 0):
             return module.meterExist()
 

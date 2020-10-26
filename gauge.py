@@ -22,7 +22,7 @@ class Gauge(Resource):
         if(module.isQueryStr(args, "parameters")):
             param = args["parameters"]
             param = param.replace(" ", ", ")
-            print(TAG, "param=", param)
+            # print(TAG, "param=", param)
         command = """SELECT %s FROM %s ORDER BY DESC LIMIT 1 """ % (param, mid)
         # print(TAG, "cmd=", command)
         if (not module.isMeterExist(mid)):
@@ -45,7 +45,7 @@ class Gauge(Resource):
 
         for i in range(len(results["parameters"])):
             param_name = results["parameters"][i]
-            print(TAG, "param_name=", param_name)
+            # print(TAG, "param_name=", param_name)
             gauge_data[param_name] = results["values"][0][i]
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")

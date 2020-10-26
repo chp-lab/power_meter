@@ -24,11 +24,11 @@ class Gauge(Resource):
             param = param.replace(" ", ", ")
             print(TAG, "param=", param)
         command = """SELECT %s FROM %s ORDER BY DESC LIMIT 1 """ % (param, mid)
-        print(TAG, "cmd=", command)
+        # print(TAG, "cmd=", command)
         if (not module.isMeterExist(mid)):
             return module.measurementNotFound()
         res = module.getData(command)
-        print(TAG, "res=", res)
+        # print(TAG, "res=", res)
         results = {
             "meter_id": "",
             "parameters": [],

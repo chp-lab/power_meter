@@ -47,6 +47,7 @@ class Gauge(Resource):
             param_name = results["parameters"][i]
             # print(TAG, "param_name=", param_name)
             gauge_data[param_name] = results["values"][0][i]
+
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
         return {

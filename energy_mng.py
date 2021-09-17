@@ -1,3 +1,4 @@
+import time
 from module import Module
 from flask import request
 from flask_restful import Resource
@@ -8,7 +9,7 @@ class EnergyMng(Resource):
     @jwt_required
     def get(self, mid):
         TAG = "energy_mng:"
-
+        start_time = time.time()
         print(TAG, "energy mng recv")
         module = Module()
         meter = Meter()
@@ -37,4 +38,33 @@ class EnergyMng(Resource):
 
         print(TAG, "res=", res)
 
-        return "test"
+        results = {
+            "meter_id": "",
+            "parameters": [],
+            "values": []
+        }
+
+        gauge_data = {}
+
+        if(len(res) > 0):
+            tmp_res = res[0]
+            results["meter_id"] = tmp_res["name"]
+            results["parameters"] = tmp_res["columns"]
+            results["values"] = tmp_res["values"]
+        else:
+            return module.measurementNotFound()
+
+        for i in range(len(results["parameters"])):
+            param_name = results["parameters"][i]
+            # print(TAG, "param_name=", param_name)
+            gauge_data[param_name] = results["values"][0][i]
+
+        elapsed_time = (time.time() - start_time) * 1000
+        print(TAG, "times=", elapsed_time, "ms")
+
+        return {
+            "type": True,
+            "message":"success",
+            "elapsed_time_ms": elapsed_time,
+            "result": gauge_data
+        }

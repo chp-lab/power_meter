@@ -26,8 +26,9 @@ class Server:
         CORS(self.app)
         self.api = Api(self.app)
         self.app.config['JWT_SECRET_KEY'] = '0x00ff0000'
-        # 15 minutes
+        # 150 minutes
         self.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15*600
+        self.app.config['PROPAGATE_EXCEPTION'] = True
         self.jwt = JWTManager(self.app)
 
 if(__name__ == "__main__"):

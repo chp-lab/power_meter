@@ -65,20 +65,26 @@ class EnergyMng(Resource):
                 "values": []
             }
 
-            gauge_data = {}
+            gauge_data = {
+                "E0": 0,
+                "E1": 0,
+                "E2": 0,
+                "time": end_date
+            }
 
-            if(len(res) > 0):
-                tmp_res = res[0]
-                results["meter_id"] = tmp_res["name"]
-                results["parameters"] = tmp_res["columns"]
-                results["values"] = tmp_res["values"]
-            else:
-                return module.measurementNotFound()
-
-            for i in range(len(results["parameters"])):
-                param_name = results["parameters"][i]
-                # print(TAG, "param_name=", param_name)
-                gauge_data[param_name] = results["values"][0][i]
+            print(TAG, "res=", res)
+            # if(len(res) > 0):
+            #     tmp_res = res[0]
+            #     results["meter_id"] = tmp_res["name"]
+            #     results["parameters"] = tmp_res["columns"]
+            #     results["values"] = tmp_res["values"]
+            # else:
+            #     return module.measurementNotFound()
+            #
+            # for i in range(len(results["parameters"])):
+            #     param_name = results["parameters"][i]
+            #     # print(TAG, "param_name=", param_name)
+            #     gauge_data[param_name] = results["values"][0][i]
 
             all_result.append(gauge_data)
 

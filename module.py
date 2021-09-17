@@ -9,6 +9,7 @@ class Module():
         client = InfluxDBClient('localhost', 8086, 'chp-lab', 'atop3352', 'envdb')
         result = client.query(query_str)
         json_res = result.raw
+        print(TAG, "json_res=", json_res)
         json_res = json_res['series']
         client.close()
         return json_res

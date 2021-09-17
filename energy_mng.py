@@ -6,7 +6,7 @@ from meter import Meter
 
 class EnergyMng(Resource):
     @jwt_required
-    def get(self, mid, year):
+    def get(self, mid):
         TAG = "energy_mng:"
         module = Module()
         meter = Meter()

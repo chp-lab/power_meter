@@ -28,7 +28,7 @@ class Server:
         self.app.config['JWT_SECRET_KEY'] = '0x00ff0000'
         # 150 minutes
         self.app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15*600
-        self.app.config['PROPAGATE_EXCEPTION'] = True
+        self.app.config['PROPAGATE_EXCEPTIONS'] = True
         self.jwt = JWTManager(self.app)
 
 if(__name__ == "__main__"):

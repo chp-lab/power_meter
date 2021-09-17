@@ -32,4 +32,4 @@ class EnergyMng(Resource):
 
         print(TAG, "res=", res)
 
-        return res, 200
+        return "test"

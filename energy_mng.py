@@ -109,6 +109,29 @@ class EnergyMng(Resource):
 
         last_year_rec = module.getData(last_year_cmd)
 
+        results = {
+            "meter_id": "",
+            "parameters": [],
+            "values": []
+        }
+        ly_data = {}
+        if (len(last_year_rec) > 0):
+            tmp_res = last_year_rec[0]
+            results["meter_id"] = tmp_res["name"]
+            results["parameters"] = tmp_res["columns"]
+            results["values"] = tmp_res["values"]
+            for i in range(len(results["parameters"])):
+                param_name = results["parameters"][i]
+                # print(TAG, "param_name=", param_name)
+                ly_data[param_name] = results["values"][0][i]
+        else:
+            ly_data = {
+                "E0": 0,
+                "E1": 0,
+                "E2": 0,
+                "time": "%s-12-31 23:59:59"
+            }
+
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
 
@@ -116,5 +139,5 @@ class EnergyMng(Resource):
             "type": True,
             "message": "success",
             "elapsed_time_ms": elapsed_time,
-            "result": last_year_rec
+            "result": ly_data
         }

@@ -28,8 +28,8 @@ class EnergyMng(Resource):
         if not ( module.isQueryStr(args, "year")):
             return module.wrongAPImsg()
         year = args["year"]
-        if not (isinstance(year, int)):
-            return module.wrongAPImsg()
+        # if not (isinstance(year, int)):
+        #     return module.wrongAPImsg()
 
         print(TAG, "user permitted")
         if(not module.isMeterExist(mid)):

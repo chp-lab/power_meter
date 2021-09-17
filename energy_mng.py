@@ -34,6 +34,8 @@ class EnergyMng(Resource):
         time_res = database.getData(time_cmd)
         cur_month = time_res[0]['result'][0]['CUR_MONTH']
 
+        all_result = []
+
         for i in range(1, cur_month):
             start_date = ""
             end_date = ""
@@ -46,44 +48,42 @@ class EnergyMng(Resource):
             print(TAG, "start_date=", start_date)
             print(TAG, "end_date=", end_date)
 
-        command = """SELECT E0, E1, E2, time 
-        FROM mm_600194433DCF 
-        WHERE (time > '2021-08-01 00:00:00') AND (time < '2021-08-27 23:59:59') 
-        ORDER BY time DESC LIMIT 1"""
+            command = """SELECT E0, E1, E2, time 
+            FROM mm_600194433DCF 
+            WHERE (time > '%s') AND (time < '%s') 
+            ORDER BY time DESC LIMIT 1""" %(start_date, end_date)
 
-        print(TAG, "cmd=", command)
+            print(TAG, "cmd=", command)
 
-        res = module.getData(command)
+            res = module.getData(command)
 
-        print(TAG, "res=", res)
+            print(TAG, "res=", res)
 
-        all_result = []
+            results = {
+                "meter_id": "",
+                "parameters": [],
+                "values": []
+            }
 
-        results = {
-            "meter_id": "",
-            "parameters": [],
-            "values": []
-        }
+            gauge_data = {}
 
-        gauge_data = {}
+            if(len(res) > 0):
+                tmp_res = res[0]
+                results["meter_id"] = tmp_res["name"]
+                results["parameters"] = tmp_res["columns"]
+                results["values"] = tmp_res["values"]
+            else:
+                return module.measurementNotFound()
 
-        if(len(res) > 0):
-            tmp_res = res[0]
-            results["meter_id"] = tmp_res["name"]
-            results["parameters"] = tmp_res["columns"]
-            results["values"] = tmp_res["values"]
-        else:
-            return module.measurementNotFound()
+            for i in range(len(results["parameters"])):
+                param_name = results["parameters"][i]
+                # print(TAG, "param_name=", param_name)
+                gauge_data[param_name] = results["values"][0][i]
 
-        for i in range(len(results["parameters"])):
-            param_name = results["parameters"][i]
-            # print(TAG, "param_name=", param_name)
-            gauge_data[param_name] = results["values"][0][i]
+            all_result.append(gauge_data)
 
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
-
-        all_result.append(gauge_data)
 
         return {
             "type": True,

@@ -6,7 +6,7 @@ from meter import Meter
 from gauge import Gauge, Host
 from login import Login, Refresh
 from create_new_meter import CreateNewMeter
-
+from energy_mng import EnergyMng
 
 import jwt
 from flask_jwt_extended import (
@@ -40,6 +40,7 @@ if(__name__ == "__main__"):
     server.api.add_resource(Login, API_VERSION + "/users/login")
     server.api.add_resource(Refresh, API_VERSION + '/users/refresh')
     server.api.add_resource(CreateNewMeter, API_VERSION + "/meters")
+    server.api.add_resource(EnergyMng, API_VERSION + "/energy/<mid>/<year>")
     server.api.add_resource(Host, "/")
     server.app.run(host="0.0.0.0", debug=True, port=5000)
 

@@ -30,6 +30,8 @@ class EnergyMng(Resource):
         WHERE (time > '2021-08-01 00:00:00') AND (time < '2021-08-27 23:59:59') 
         ORDER BY time DESC LIMIT 1"""
 
+        print(TAG, "cmd=", command)
+
         res = module.getData(command)
 
         print(TAG, "res=", res)

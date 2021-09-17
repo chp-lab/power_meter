@@ -20,7 +20,11 @@ class EnergyMng(Resource):
         print(TAG, "energy mng recv")
         module = Module()
         meter = Meter()
-        current_user = get_jwt_identity()
+        try:
+            current_user = get_jwt_identity()
+        except:
+            return module.unauthorized()
+
         database = Database()
 
         print(TAG, "current_user=", current_user)

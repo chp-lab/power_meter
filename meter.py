@@ -22,7 +22,10 @@ class Meter(Resource):
     def get(self, mid):
         TAG = "Meter:"
         module = Module()
-        current_user = get_jwt_identity()
+        try:
+            current_user = get_jwt_identity()
+        except:
+            return module.unauthorized()
         print(TAG, "current_user=", current_user)
 
         username = current_user['sub']

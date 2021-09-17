@@ -45,7 +45,7 @@ if(__name__ == "__main__"):
 
     server.api.add_resource(Host, "/")
     context = ('/etc/letsencrypt/live/chp.giantiot.com/fullchain.pem', '/etc/letsencrypt/live/chp.giantiot.com/privkey.pem')
-    server.app.run(host="chp.giantiot.com", debug=False, ssl_context=context, port=443)
+    server.app.run(host="0.0.0.0", debug=False, ssl_context=context, port=443)
 
     # app.run(host="0.0.0.0", debug=True, port=5000)
 

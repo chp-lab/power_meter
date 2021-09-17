@@ -7,6 +7,11 @@ from meter import Meter
 from database import Database
 
 class EnergyMng(Resource):
+    def toPos(self, e_usage):
+        if(e_usage < 0):
+            return 0
+        else:
+            return e_usage
     @jwt_required
     def get(self, mid):
         TAG = "energy_mng:"
@@ -146,6 +151,11 @@ class EnergyMng(Resource):
                 e0_usage = e_rec["E0"] - last_month_rec["E0"]
                 e1_usage = e_rec["E1"] - last_month_rec["E1"]
                 e2_usage = e_rec["E2"] - last_month_rec["E2"]
+
+            e0_usage = self.toPos(e0_usage)
+            e1_usage = self.toPos(e1_usage)
+            e2_usage = self.toPos(e2_usage)
+
             all_result[i]["E0_usage"] = e0_usage
             all_result[i]["E1_usage"] = e1_usage
             all_result[i]["E2_usage"] = e2_usage

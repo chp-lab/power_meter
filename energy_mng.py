@@ -168,6 +168,8 @@ class EnergyMng(Resource):
             all_result[i]["E1_usage"] = e1_usage
             all_result[i]["E2_usage"] = e2_usage
 
+            all_result[i]["time"] = all_result[i]["time"].split(".")[0]
+
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
 

@@ -156,6 +156,10 @@ class EnergyMng(Resource):
             e1_usage = self.toPos(e1_usage)
             e2_usage = self.toPos(e2_usage)
 
+            e0_usage = round(e0_usage, 2)
+            e1_usage = round(e1_usage, 2)
+            e2_usage = round(e2_usage, 2)
+
             all_result[i]["E0_usage"] = e0_usage
             all_result[i]["E1_usage"] = e1_usage
             all_result[i]["E2_usage"] = e2_usage

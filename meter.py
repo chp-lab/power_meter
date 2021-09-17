@@ -86,7 +86,7 @@ class Meter(Resource):
             for j in range(len(results["values"])):
                 x_v = results["values"][j][0]
                 x_v = x_v.split(".")[0]
-                x_v = x_v.replace("T", "\r\n")
+                x_v = x_v.replace("T", " ")
                 x_series.append(x_v)
                 y_series.append(results["values"][j][i])
             graph_data[parameter] = {"x": x_series, "y": y_series}

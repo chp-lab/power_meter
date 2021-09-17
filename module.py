@@ -5,7 +5,7 @@ class Module():
         print("Creating new modules")
     def getData(self, query_str):
         TAG = "getData:"
-        print(TAG, query_str)
+        # print(TAG, query_str)
         client = InfluxDBClient('localhost', 8086, 'chp-lab', 'atop3352', 'envdb')
         result = client.query(query_str)
         json_res = result.raw

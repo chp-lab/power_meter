@@ -43,7 +43,7 @@ if(__name__ == "__main__"):
     server.api.add_resource(EnergyMng, API_VERSION + "/energy/<mid>")
 
     server.api.add_resource(Host, "/")
-    server.app.run(host="0.0.0.0", debug=True, port=5000)
+    server.app.run(host="0.0.0.0", debug=False, port=5000)
 
     # app.run(host="0.0.0.0", debug=True, port=5000)
 

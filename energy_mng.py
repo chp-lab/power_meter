@@ -10,6 +10,7 @@ class EnergyMng(Resource):
     @jwt_required
     def get(self, mid):
         TAG = "energy_mng:"
+
         start_time = time.time()
         print(TAG, "energy mng recv")
         module = Module()
@@ -24,6 +25,11 @@ class EnergyMng(Resource):
         if(not perm):
             return module.unauthorized()
         args = request.args
+        if not ( module.isQueryStr(args, "year")):
+            return module.wrongAPImsg()
+        year = args["year"]
+        if not (isinstance(year, int)):
+            return module.wrongAPImsg()
 
         print(TAG, "user permitted")
         if(not module.isMeterExist(mid)):
@@ -42,18 +48,18 @@ class EnergyMng(Resource):
             start_date = ""
             end_date = ""
             if(i < 10):
-                start_date = "2021-0%s-01 00:00:00" %(i)
-                end_date = "2021-0%s-27 23:59:59" %(i)
+                start_date = "%s-0%s-01 00:00:00" % (year, i)
+                end_date = "%s-0%s-27 23:59:59" % (year, i)
             else:
-                start_date = "2021-%s-01 00:00:00" %(i)
-                end_date = "2021-%s-27 23:59:59" %(i)
+                start_date = "%s-%s-01 00:00:00" % (year, i)
+                end_date = "%s-%s-27 23:59:59" % (year, i)
             # print(TAG, "start_date=", start_date)
             # print(TAG, "end_date=", end_date)
 
             command = """SELECT E0, E1, E2, time 
-            FROM mm_600194433DCF 
+            FROM %s 
             WHERE (time > '%s') AND (time < '%s') 
-            ORDER BY time DESC LIMIT 1""" %(start_date, end_date)
+            ORDER BY time DESC LIMIT 1""" % (mid, start_date, end_date)
 
             # print(TAG, "cmd=", command)
 
@@ -93,12 +99,20 @@ class EnergyMng(Resource):
 
             all_result.append(gauge_data)
 
+        last_year = year - 1
+        last_year_cmd = """SELECT E0, E1, E2, time 
+        FROM mm_600194433DCF 
+        WHERE (time > '%s-01-01 00:00:00') AND (time < '%s-12-31 23:59:59') 
+        ORDER BY time DESC LIMIT 1""" % (last_year, last_year)
+
+        last_year_rec = module.getData(last_year_cmd)
+
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
 
         return {
             "type": True,
-            "message":"success",
+            "message": "success",
             "elapsed_time_ms": elapsed_time,
             "result": all_result
         }

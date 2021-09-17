@@ -27,6 +27,21 @@ class EnergyMng(Resource):
             print(TAG, "meter not found")
             return module.measurementNotFound()
 
+        time_cmd = """SELECT MONTH(CURRENT_DATE) AS CUR_MONTH"""
+        cur_month = time_cmd[0]['result'][0]['CUR_MONTH']
+
+        for i in range(1, cur_month):
+            start_date = ""
+            end_date = ""
+            if(i < 10):
+                start_date = "2021-0%s-01 00:00:00" %(i)
+                end_date = "2021-0%s-27 23:59:59" %(i)
+            else:
+                start_date = "2021-%s-01 00:00:00" %(i)
+                end_date = "2021-%s-27 23:59:59" %(i)
+            print(TAG, "start_date=", start_date)
+            print(TAG, "end_date=", end_date)
+
         command = """SELECT E0, E1, E2, time 
         FROM mm_600194433DCF 
         WHERE (time > '2021-08-01 00:00:00') AND (time < '2021-08-27 23:59:59') 

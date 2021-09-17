@@ -157,5 +157,5 @@ class EnergyMng(Resource):
             "type": True,
             "message": "success",
             "elapsed_time_ms": elapsed_time,
-            "result": ly_data
+            "result": all_result
         }

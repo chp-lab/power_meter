@@ -89,10 +89,10 @@ class EnergyMng(Resource):
                 results["meter_id"] = tmp_res["name"]
                 results["parameters"] = tmp_res["columns"]
                 results["values"] = tmp_res["values"]
-                for i in range(len(results["parameters"])):
-                    param_name = results["parameters"][i]
+                for j in range(len(results["parameters"])):
+                    param_name = results["parameters"][j]
                     # print(TAG, "param_name=", param_name)
-                    gauge_data[param_name] = results["values"][0][i]
+                    gauge_data[param_name] = results["values"][0][j]
             else:
                 gauge_data = {
                     "E0": 0,

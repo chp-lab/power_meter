@@ -4,6 +4,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from meter import Meter
+from database import Database
 
 class EnergyMng(Resource):
     @jwt_required
@@ -14,6 +15,8 @@ class EnergyMng(Resource):
         module = Module()
         meter = Meter()
         current_user = get_jwt_identity()
+        database = Database()
+
         print(TAG, "current_user=", current_user)
 
         username = current_user['sub']
@@ -28,7 +31,8 @@ class EnergyMng(Resource):
             return module.measurementNotFound()
 
         time_cmd = """SELECT MONTH(CURRENT_DATE) AS CUR_MONTH"""
-        cur_month = time_cmd[0]['result'][0]['CUR_MONTH']
+        time_res = database.getData(time_cmd)
+        cur_month = time_res[0]['result'][0]['CUR_MONTH']
 
         for i in range(1, cur_month):
             start_date = ""

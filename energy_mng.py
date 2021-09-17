@@ -38,6 +38,8 @@ class EnergyMng(Resource):
 
         print(TAG, "res=", res)
 
+        all_result = []
+
         results = {
             "meter_id": "",
             "parameters": [],
@@ -62,9 +64,11 @@ class EnergyMng(Resource):
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")
 
+        all_result.append(gauge_data)
+
         return {
             "type": True,
             "message":"success",
             "elapsed_time_ms": elapsed_time,
-            "result": gauge_data
+            "result": all_result
         }

@@ -36,7 +36,7 @@ class EnergyMng(Resource):
 
         all_result = []
 
-        for i in range(1, cur_month):
+        for i in range(6, cur_month):
             start_date = ""
             end_date = ""
             if(i < 10):

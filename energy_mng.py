@@ -49,7 +49,7 @@ class EnergyMng(Resource):
 
         all_result = []
 
-        mounts_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
+        months_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
 
         for i in range(1, cur_month):
             start_date = ""
@@ -101,7 +101,7 @@ class EnergyMng(Resource):
                     "time": end_date
                 }
 
-            gauge_data["month_name"] = mounts_name[i - 1]
+            gauge_data["month_name"] = months_name[i - 1]
             gauge_data["month_num"] = i
 
             all_result.append(gauge_data)

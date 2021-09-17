@@ -129,8 +129,26 @@ class EnergyMng(Resource):
                 "E0": 0,
                 "E1": 0,
                 "E2": 0,
-                "time": "%s-12-31 23:59:59"
+                "time": "%s-12-31 23:59:59" %(last_year)
             }
+
+        for i in range(0, len(all_result)):
+            e_rec = all_result[i]
+            e0_usage = 0
+            e1_usage = 0
+            e2_usage = 0
+            if i == 0:
+                e0_usage = e_rec["E0"] - ly_data["E0"]
+                e1_usage = e_rec["E1"] - ly_data["E1"]
+                e2_usage = e_rec["E2"] - ly_data["E2"]
+            else:
+                last_month_rec = all_result[i - 1]
+                e0_usage = e_rec["E0"] - last_month_rec["E0"]
+                e1_usage = e_rec["E1"] - last_month_rec["E1"]
+                e2_usage = e_rec["E2"] - last_month_rec["E2"]
+            all_result[i]["E0_usage"] = e0_usage
+            all_result[i]["E1_usage"] = e1_usage
+            all_result[i]["E2_usage"] = e2_usage
 
         elapsed_time = (time.time() - start_time) * 1000
         print(TAG, "times=", elapsed_time, "ms")

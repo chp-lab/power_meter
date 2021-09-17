@@ -28,6 +28,8 @@ class EnergyMng(Resource):
         if not ( module.isQueryStr(args, "year")):
             return module.wrongAPImsg()
         year = args["year"]
+        year = int(year)
+
         # if not (isinstance(year, int)):
         #     return module.wrongAPImsg()
 

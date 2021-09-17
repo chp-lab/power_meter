@@ -51,7 +51,7 @@ class EnergyMng(Resource):
 
         months_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
 
-        for i in range(1, cur_month):
+        for i in range(1, cur_month + 1):
             start_date = ""
             end_date = ""
             if(i < 10):

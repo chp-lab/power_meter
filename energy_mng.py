@@ -8,6 +8,8 @@ class EnergyMng(Resource):
     @jwt_required
     def get(self, mid):
         TAG = "energy_mng:"
+
+        print(TAG, "energy mng recv")
         module = Module()
         meter = Meter()
         current_user = get_jwt_identity()

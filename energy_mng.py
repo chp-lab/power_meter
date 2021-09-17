@@ -30,4 +30,6 @@ class EnergyMng(Resource):
 
         res = module.getData(command)
 
-        return res
+        print(TAG, "res=", res)
+
+        return res, 200

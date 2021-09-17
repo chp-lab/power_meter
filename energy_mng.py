@@ -67,7 +67,7 @@ class EnergyMng(Resource):
 
             res = module.getData(command)
 
-            print(TAG, "res=", res)
+            # print(TAG, "res=", res)
 
             results = {
                 "meter_id": "",
@@ -116,5 +116,5 @@ class EnergyMng(Resource):
             "type": True,
             "message": "success",
             "elapsed_time_ms": elapsed_time,
-            "result": all_result
+            "result": last_year_rec
         }

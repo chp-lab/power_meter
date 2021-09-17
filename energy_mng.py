@@ -20,9 +20,10 @@ class EnergyMng(Resource):
         if(not perm):
             return module.unauthorized()
         args = request.args
-        year = args["year"]
 
+        print(TAG, "user permitted")
         if(not module.isMeterExist(mid)):
+            print(TAG, "meter not found")
             return module.measurementNotFound()
 
         command = """SELECT E0, E1, E2, time 

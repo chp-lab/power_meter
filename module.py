@@ -10,7 +10,10 @@ class Module():
         result = client.query(query_str)
         json_res = result.raw
         print(TAG, "json_res=", json_res)
-        json_res = json_res['series']
+        if('series' in json_res):
+            json_res = json_res['series']
+        else:
+            json_res = []
         client.close()
         return json_res
     def isMeterExist(self, mid):

@@ -44,8 +44,7 @@ if(__name__ == "__main__"):
     server.api.add_resource(EnergyMng, API_VERSION + "/energy/<mid>")
 
     server.api.add_resource(Host, "/")
-    context = ('/etc/letsencrypt/live/chp.giantiot.com/cert.pem', '/etc/letsencrypt/live/www.giantiot.com/privkey.pem')
-    server.app.run(host="chp.giantiot.com", debug=False, ssl_context=context, port=5001)
+    server.app.run(host="0.0.0.0", debug=False, port=5000)
 
     # app.run(host="0.0.0.0", debug=True, port=5000)
 

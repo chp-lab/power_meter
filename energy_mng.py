@@ -45,15 +45,15 @@ class EnergyMng(Resource):
             else:
                 start_date = "2021-%s-01 00:00:00" %(i)
                 end_date = "2021-%s-27 23:59:59" %(i)
-            print(TAG, "start_date=", start_date)
-            print(TAG, "end_date=", end_date)
+            # print(TAG, "start_date=", start_date)
+            # print(TAG, "end_date=", end_date)
 
             command = """SELECT E0, E1, E2, time 
             FROM mm_600194433DCF 
             WHERE (time > '%s') AND (time < '%s') 
             ORDER BY time DESC LIMIT 1""" %(start_date, end_date)
 
-            print(TAG, "cmd=", command)
+            # print(TAG, "cmd=", command)
 
             res = module.getData(command)
 
@@ -73,18 +73,19 @@ class EnergyMng(Resource):
             }
 
             print(TAG, "res=", res)
-            # if(len(res) > 0):
-            #     tmp_res = res[0]
-            #     results["meter_id"] = tmp_res["name"]
-            #     results["parameters"] = tmp_res["columns"]
-            #     results["values"] = tmp_res["values"]
-            # else:
-            #     return module.measurementNotFound()
-            #
-            # for i in range(len(results["parameters"])):
-            #     param_name = results["parameters"][i]
-            #     # print(TAG, "param_name=", param_name)
-            #     gauge_data[param_name] = results["values"][0][i]
+
+            if(len(res) > 0):
+                tmp_res = res[0]
+                results["meter_id"] = tmp_res["name"]
+                results["parameters"] = tmp_res["columns"]
+                results["values"] = tmp_res["values"]
+            else:
+                return module.measurementNotFound()
+
+            for i in range(len(results["parameters"])):
+                param_name = results["parameters"][i]
+                # print(TAG, "param_name=", param_name)
+                gauge_data[param_name] = results["values"][0][i]
 
             all_result.append(gauge_data)
 

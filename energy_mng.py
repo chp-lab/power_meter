@@ -70,7 +70,7 @@ class EnergyMng(Resource):
             command = """SELECT E0, E1, E2, time 
             FROM %s 
             WHERE (time > '%s') AND (time < '%s') 
-            ORDER BY time ASC LIMIT 1""" % (mid, start_date, end_date)
+            ORDER BY time DESC LIMIT 1""" % (mid, start_date, end_date)
 
             # print(TAG, "cmd=", command)
 

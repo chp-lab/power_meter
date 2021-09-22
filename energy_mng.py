@@ -54,16 +54,17 @@ class EnergyMng(Resource):
         all_result = []
 
         months_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
+        end_of_month = [31, 27, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
         for i in range(1, cur_month + 1):
             start_date = ""
             end_date = ""
             if(i < 10):
                 start_date = "%s-0%s-01 00:00:00" % (year, i)
-                end_date = "%s-0%s-27 23:59:59" % (year, i)
+                end_date = "%s-0%s-%s 23:59:59" % (year, i, end_of_month[i - 1])
             else:
                 start_date = "%s-%s-01 00:00:00" % (year, i)
-                end_date = "%s-%s-27 23:59:59" % (year, i)
+                end_date = "%s-%s-%s 23:59:59" % (year, end_of_month[i - 1])
             # print(TAG, "start_date=", start_date)
             # print(TAG, "end_date=", end_date)
 

@@ -5,6 +5,7 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from meter import Meter
 from database import Database
+import calendar
 
 class EnergyMng(Resource):
     def toPos(self, e_usage):
@@ -53,8 +54,12 @@ class EnergyMng(Resource):
 
         all_result = []
 
+        days_of_feb = 28
+        if(calendar.isleap(year)):
+            days_of_feb = 29
+
         months_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
-        end_of_month = [31, 27, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        end_of_month = [31, days_of_feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
         for i in range(1, cur_month + 1):
             start_date = ""

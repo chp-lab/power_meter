@@ -69,7 +69,7 @@ class EnergyMng(Resource):
                 end_date = "%s-0%s-%s 23:59:59" % (year, i, end_of_month[i - 1])
             else:
                 start_date = "%s-%s-01 00:00:00" % (year, i)
-                end_date = "%s-%s-%s 23:59:59" % (year, end_of_month[i - 1])
+                end_date = "%s-%s-%s 23:59:59" % (year, i, end_of_month[i - 1])
             # print(TAG, "start_date=", start_date)
             # print(TAG, "end_date=", end_date)
 

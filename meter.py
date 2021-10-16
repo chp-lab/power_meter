@@ -79,6 +79,8 @@ class Meter(Resource):
         graph_data = {}
         for i in range(1, len(results["parameters"])):
             # print(TAG, "i=", i)
+            tmp_max = 0;
+            tmp_min = 1000000;
             parameter = results["parameters"][i]
             # print(TAG, "parameter=", parameter)
             x_series = []
@@ -89,7 +91,16 @@ class Meter(Resource):
                 x_v = x_v.replace("T", " ")
                 x_series.append(x_v)
                 y_series.append(results["values"][j][i])
+                tmp_y = results["values"][j][i]
+                if(tmp_y > tmp_max):
+                    tmp_max = tmp_y
+
+                if(tmp_y < tmp_min):
+                    tmp_min = tmp_y
+
             graph_data[parameter] = {"x": x_series, "y": y_series}
+            graph_data[parameter]["max"] = tmp_max
+            graph_data[parameter]["min"] = tmp_min
 
         # print(TAG, "res=", res)
         # print(TAG, "name=", meter_name)

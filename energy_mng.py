@@ -174,7 +174,8 @@ class EnergyMng(Resource):
             all_result[i]["E1_usage"] = e1_usage
             all_result[i]["E2_usage"] = e2_usage
 
-            e_total = all_result[i]["E0"] + all_result[i]["E1"] + all_result[i]["E2"]
+            # e_total = all_result[i]["E0"] + all_result[i]["E1"] + all_result[i]["E2"]
+            e_total = e0_usage + e1_usage + e2_usage
             e_total = round(e_total, 2)
             all_result[i]["E_total"] = e_total
 

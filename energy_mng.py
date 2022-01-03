@@ -55,7 +55,7 @@ class EnergyMng(Resource):
 
         # fix last year data bug
         if(year < cur_year):
-            cur_month = 11
+            cur_month = 12
 
         all_result = []
 

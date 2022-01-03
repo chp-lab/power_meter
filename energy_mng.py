@@ -48,9 +48,14 @@ class EnergyMng(Resource):
             print(TAG, "meter not found")
             return module.measurementNotFound()
 
-        time_cmd = """SELECT MONTH(CURRENT_DATE) AS CUR_MONTH"""
+        time_cmd = """SELECT MONTH(CURRENT_DATE) AS CUR_MONTH, YEAR(CURRENT_DATE) AS CUR_YEAR"""
         time_res = database.getData(time_cmd)
         cur_month = time_res[0]['result'][0]['CUR_MONTH']
+        cur_year = time_res[0]['result'][0]['CUR_YEAR']
+
+        # fix last year data bug
+        if(year < cur_year):
+            cur_month = 11
 
         all_result = []
 
